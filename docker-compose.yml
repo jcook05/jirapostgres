@@ -1,0 +1,32 @@
+version: '3'
+services:
+
+ version: '3'
+services:
+  jiraseven:
+    container_name: jira_seven_postgres
+    image: jirapostgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      - jirapostgres
+    volumes:
+      - /opt/jira
+      - ./JiraHome:/var/atlassian/jira
+    networks:
+      - network
+
+  jirapostgres:
+    container_name: my_postgres_for_jira
+    image: postgres:9.6.5
+    ports:
+      - "5432:5432"
+    volumes:
+      - /var/lib/postgresql/data
+      - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - network
+ 
+networks:
+  network:
+    driver: bridge
